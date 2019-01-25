@@ -15,7 +15,7 @@ public class ClientService {
     @Autowired
     private ClientRepository repository;
 
-    public Client findById(Integer id) throws NotFoundException {
+    public Client findById(Integer id) throws NotFoundException, IllegalArgumentException {
         if(id == null)
             throw idRequired;
 

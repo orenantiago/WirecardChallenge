@@ -1,7 +1,7 @@
 package wirecardchallenge.payments.Service
 
+import javassist.NotFoundException
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Shared
 import spock.lang.Specification
@@ -11,7 +11,6 @@ import wirecardchallenge.payments.repository.ClientRepository
 import static wirecardchallenge.WirecardChallengeExceptions.clientNotFoundException
 import static wirecardchallenge.WirecardChallengeExceptions.idRequired
 
-@DataJpaTest
 @SpringBootTest
 class ClientServiceTest extends Specification {
     @Autowired
@@ -40,22 +39,20 @@ class ClientServiceTest extends Specification {
     }
 
     def "given unknown id should not find client by id"() {
-        given:
-
         when:
         service.findById(123)
 
         then:
-        thrown clientNotFoundException
+        thrown NotFoundException
     }
 
     def "when find by id without id should throw error"() {
         given:
 
         when:
-        service.findById(123)
+        def ex = service.findById()
 
         then:
-        thrown idRequired
+        thrown IllegalArgumentException
     }
 }
