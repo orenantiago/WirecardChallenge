@@ -11,6 +11,10 @@ public class WirecardChallengeExceptions {
 //    Buyer
     public static NotFoundException buyerNotFoundException = new NotFoundException("Buyer not found");
 
+//    Card
+    public static NotFoundException cardNotFoundException = new NotFoundException("Card not found");
+    public static IllegalArgumentException cardNumberRequired = new IllegalArgumentException("Card number required");
+
 
 //    Other
     public static IllegalArgumentException idRequired = new IllegalArgumentException("Id required");
