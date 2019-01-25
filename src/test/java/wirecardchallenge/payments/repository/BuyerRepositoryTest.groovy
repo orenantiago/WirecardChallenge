@@ -43,4 +43,15 @@ class BuyerRepositoryTest extends Specification {
         then:
         number == 1
     }
+
+    def "should find buyer by cpf"() {
+        given:
+        repository.save(buyer)
+
+        when:
+        def found = repository.findBuyerByCpf(buyer.cpf)
+
+        then:
+        found.isPresent()
+    }
 }

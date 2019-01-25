@@ -26,6 +26,7 @@ public class Buyer {
     private String email;
 
     @NotNull
+    @Column(unique = true)
     @Size(min=1,max=14)
     private String cpf;
 
