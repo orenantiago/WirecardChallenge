@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Entity
 @Data
@@ -14,7 +15,11 @@ import javax.validation.constraints.Size;
 public class Card {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Integer id;
+
     @NotNull
+    @Column(unique = true)
     private Integer number;
 
     @NotNull
@@ -23,4 +28,7 @@ public class Card {
 
     @NotNull
     private Integer cvv;
+
+    @NotNull
+    private Date expiration;
 }
