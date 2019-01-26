@@ -16,8 +16,9 @@ public class Client {
 
     @NotNull
     @Size(min=1,max=50)
-    private String firstName;
+    private String name;
 
-    @Size(min=1,max=50)
-    private String lastName;
+    @NotNull
+    @Size(min=1, max=50)
+    private String cnpj;
 }

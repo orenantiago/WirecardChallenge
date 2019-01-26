@@ -21,7 +21,8 @@ class ClientServiceTest extends Specification {
 
     def setupSpec() {
         client = new Client()
-        client.firstName = "test"
+        client.name = "test"
+        client.cnpj = "74.406.687/0001-04"
     }
 
     def "given known id should find client"() {

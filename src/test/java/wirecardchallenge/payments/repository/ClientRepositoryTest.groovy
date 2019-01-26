@@ -17,7 +17,8 @@ class ClientRepositoryTest extends Specification {
 
     def setupSpec() {
         client = new Client()
-        client.firstName = "test"
+        client.name = "test"
+        client.cnpj = "74.406.687/0001-04"
     }
 
     def "should find client by id"() {
