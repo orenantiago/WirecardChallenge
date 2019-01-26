@@ -97,4 +97,8 @@ public class Payment {
         if(cardNumber == null || cardNumber < 0)
             throw invalidCardNumber;
     }
+
+    public boolean isBoletoType() {
+        return type == PaymentType.BOLETO;
+    }
 }

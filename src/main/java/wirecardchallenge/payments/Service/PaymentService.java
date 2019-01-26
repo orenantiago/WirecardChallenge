@@ -7,10 +7,16 @@ import wirecardchallenge.payments.model.Client;
 import wirecardchallenge.payments.model.Payment;
 import wirecardchallenge.payments.repository.PaymentRepository;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import static wirecardchallenge.WirecardChallengeExceptions.paymentNotFound;
 
 @Service
 public class PaymentService {
+
+    private static final Integer BOLETO_MIN = 100000000;
+    private static final Integer BOLETO_MAX = 999999999;
+
 
     @Autowired
     PaymentRepository repository;
@@ -31,6 +37,14 @@ public class PaymentService {
     public void setupPayment(Payment payment) throws NotFoundException {
         Client client = clientService.findById(payment.clientId());
         payment.setClient(client);
+
+        if(payment.isBoletoType())
+            payment.setBoletoNumber(generateBoletoNumber());
     }
+
+    private Integer generateBoletoNumber() {
+        return ThreadLocalRandom.current().nextInt(BOLETO_MIN, BOLETO_MAX + 1);
+    }
+
 
 }

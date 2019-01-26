@@ -90,6 +90,17 @@ class PaymentServiceTest extends Specification {
         ex.message == WirecardChallengeExceptions.invalidPaymentAmount.message
     }
 
+    def "when create payment with boleto type should should define boleto number"() {
+        given:
+        def payment = validPayment()
+
+        when:
+        def created = service.createPayment(payment)
+
+        then:
+        created.boletoNumber
+    }
+
     def "when create payment without client should throw error"() {
         given:
         def payment = validPayment()
