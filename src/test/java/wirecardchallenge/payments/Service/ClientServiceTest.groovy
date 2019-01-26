@@ -8,9 +8,6 @@ import spock.lang.Specification
 import wirecardchallenge.payments.model.Client
 import wirecardchallenge.payments.repository.ClientRepository
 
-import static wirecardchallenge.WirecardChallengeExceptions.clientNotFoundException
-import static wirecardchallenge.WirecardChallengeExceptions.idRequired
-
 @SpringBootTest
 class ClientServiceTest extends Specification {
     @Autowired
