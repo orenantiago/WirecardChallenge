@@ -76,6 +76,18 @@ class PaymentServiceTest extends Specification {
         ex.message == WirecardChallengeExceptions.invalidBuyerEmail.message
     }
 
+    def "should find all payments"() {
+        given:
+        service.createPayment(validPayment())
+        service.createPayment(validPayment())
+
+        when:
+        def all = service.findAll()
+
+        then:
+        all.size() == 2
+    }
+
     def "when create payment with invalid amount should throw error"() {
         given:
         def payment = validPayment()
