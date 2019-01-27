@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import wirecardchallenge.payments.model.Client;
 import wirecardchallenge.payments.model.Payment;
+import wirecardchallenge.payments.model.PaymentStatus;
 import wirecardchallenge.payments.repository.PaymentRepository;
 
 import java.util.List;
@@ -13,6 +14,8 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static wirecardchallenge.WirecardChallengeExceptions.paymentNotFound;
+import static wirecardchallenge.payments.model.PaymentStatus.PAID;
+import static wirecardchallenge.payments.model.PaymentStatus.REJECTED;
 
 @Service
 public class PaymentService {
@@ -29,7 +32,7 @@ public class PaymentService {
 
     public Payment createPayment(Payment payment) throws NotFoundException {
         payment.validateMe();
-        setupPayment(payment);
+        processPayment(payment);
         return repository.save(payment);
     }
 
@@ -41,17 +44,28 @@ public class PaymentService {
                 .collect(Collectors.toList());
     }
 
-    public void setupPayment(Payment payment) throws NotFoundException {
+    public void processPayment(Payment payment) throws NotFoundException {
         Client client = clientService.findById(payment.clientId());
         payment.setClient(client);
 
         if(payment.isBoletoType())
-            payment.setBoletoNumber(generateBoletoNumber());
+            processBoletoPayment(payment);
+        else
+            processCreditCardPayment(payment);
     }
 
-    private Integer generateBoletoNumber() {
-        return ThreadLocalRandom.current().nextInt(BOLETO_MIN, BOLETO_MAX + 1);
+    private void processCreditCardPayment(Payment payment) {
+        if (Math.random() < 0.5) {
+            payment.setStatus(PAID);
+        } else {
+            payment.setStatus(REJECTED);
+        }
     }
 
+    private void processBoletoPayment(Payment payment) {
+        Integer boletoNumber =  ThreadLocalRandom.current().nextInt(BOLETO_MIN, BOLETO_MAX + 1);
+        payment.setBoletoNumber(boletoNumber);
+        payment.setStatus(PaymentStatus.WAITING_PAYMENT);
+    }
 
 }

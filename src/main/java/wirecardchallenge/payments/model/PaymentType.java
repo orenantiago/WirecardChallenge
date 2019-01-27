@@ -1,11 +1,16 @@
 package wirecardchallenge.payments.model;
 
 public enum PaymentType {
-    CREDITCARD("Credit card"), BOLETO("Boleto");
+    CREDIT_CARD("Credit Card"), BOLETO("Boleto");
 
-    public String description;
+    private String description;
 
     PaymentType(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return description;
     }
 }

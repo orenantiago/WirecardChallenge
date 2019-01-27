@@ -6,11 +6,13 @@ import spock.lang.Specification
 import wirecardchallenge.WirecardChallengeExceptions
 import wirecardchallenge.payments.model.Client
 import wirecardchallenge.payments.model.Payment
+import wirecardchallenge.payments.model.PaymentStatus
 import wirecardchallenge.payments.model.PaymentType
 import wirecardchallenge.payments.repository.ClientRepository
 import wirecardchallenge.payments.repository.PaymentRepository
 
 import java.security.InvalidParameterException
+import java.time.Instant
 
 @SpringBootTest
 class PaymentServiceTest extends Specification {
@@ -22,6 +24,18 @@ class PaymentServiceTest extends Specification {
 
     @Autowired
     PaymentRepository repository
+
+    def "should find all payments"() {
+        given:
+        service.createPayment(validPayment())
+        service.createPayment(validPayment())
+
+        when:
+        def all = service.findAll()
+
+        then:
+        all.size() == 2
+    }
 
     def "given known payment id should find it"() {
         given:
@@ -49,10 +63,8 @@ class PaymentServiceTest extends Specification {
 
     def "when create payment of type credit card without card info should throw error"() {
         given:
-        def payment = validPayment()
-        payment.type = PaymentType.CREDITCARD
-        payment.cardNumber = 123123
-
+        def payment = validCreditcardPayment()
+        payment.cardCvv = null
 
         when:
         service.createPayment(payment)
@@ -74,18 +86,6 @@ class PaymentServiceTest extends Specification {
         then:
         def ex = thrown InvalidParameterException
         ex.message == WirecardChallengeExceptions.invalidBuyerEmail.message
-    }
-
-    def "should find all payments"() {
-        given:
-        service.createPayment(validPayment())
-        service.createPayment(validPayment())
-
-        when:
-        def all = service.findAll()
-
-        then:
-        all.size() == 2
     }
 
     def "when create payment with invalid amount should throw error"() {
@@ -111,6 +111,29 @@ class PaymentServiceTest extends Specification {
 
         then:
         created.boletoNumber
+    }
+
+    def "when create payment with boleto type should should define payment status as waiting payment"() {
+        given:
+        def payment = validPayment()
+
+        when:
+        def created = service.createPayment(payment)
+
+        then:
+        created.status == PaymentStatus.WAITING_PAYMENT
+    }
+
+    def "when create payment with credit card type should should define payment status"() {
+        given:
+        def payment = validCreditcardPayment()
+
+        when:
+        def created = service.createPayment(payment)
+
+        then:
+        created.status == PaymentStatus.PAID || created.status == PaymentStatus.REJECTED
+
     }
 
     def "when create payment without client should throw error"() {
@@ -141,6 +164,16 @@ class PaymentServiceTest extends Specification {
         payment.buyerEmail = "email@email.com"
         payment.buyerCpf = "123.123.123-01"
 
+        return payment
+    }
+
+    private def validCreditcardPayment() {
+        def payment = validPayment()
+        payment.type = PaymentType.CREDIT_CARD
+        payment.cardNumber = 123123
+        payment.cardCvv = 123
+        payment.cardHolderName = "test"
+        payment.cardExpiration = Date.from(Instant.now().plusSeconds(86400))
         return payment
     }
 }
