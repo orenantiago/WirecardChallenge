@@ -1,6 +1,12 @@
 package wirecardchallenge.payments.model;
 
-public enum PaymentType {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+import java.io.Serializable;
+
+
+public enum PaymentType implements Serializable {
     CREDIT_CARD("Credit Card"), BOLETO("Boleto");
 
     private String description;
@@ -9,7 +15,6 @@ public enum PaymentType {
         this.description = description;
     }
 
-    @Override
     public String toString() {
         return description;
     }
