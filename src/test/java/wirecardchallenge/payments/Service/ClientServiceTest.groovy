@@ -8,6 +8,8 @@ import spock.lang.Specification
 import wirecardchallenge.payments.model.Client
 import wirecardchallenge.payments.repository.ClientRepository
 
+import java.security.InvalidParameterException
+
 @SpringBootTest
 class ClientServiceTest extends Specification {
     @Autowired
@@ -23,6 +25,15 @@ class ClientServiceTest extends Specification {
         client = new Client()
         client.name = "test"
         client.cnpj = "74.406.687/0001-04"
+    }
+
+    def "given valid client should create it"() {
+        when:
+        def created = service.createClient(client)
+        def found = service.findById(created.id)
+
+        then:
+        found.id == created.id
     }
 
     def "given known id should find client"() {
@@ -52,5 +63,14 @@ class ClientServiceTest extends Specification {
 
         then:
         thrown IllegalArgumentException
+    }
+
+    def "given invalid client should not create it"() {
+        when:
+        client.name = null
+        service.createClient(client)
+
+        then:
+        thrown InvalidParameterException
     }
 }

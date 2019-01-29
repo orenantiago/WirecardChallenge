@@ -13,12 +13,17 @@ import static wirecardchallenge.WirecardChallengeExceptions.idRequired;
 public class ClientService {
 
     @Autowired
-    private ClientRepository repository;
+    private ClientRepository clientRepository;
+
+    public Client createClient(Client client) {
+        client.validateMe();
+        return clientRepository.save(client);
+    }
 
     public Client findById(Integer id) throws NotFoundException, IllegalArgumentException {
         if(id == null)
             throw idRequired;
 
-        return repository.findById(id).orElseThrow(()-> clientNotFoundException);
+        return clientRepository.findById(id).orElseThrow(()-> clientNotFoundException);
     }
 }
