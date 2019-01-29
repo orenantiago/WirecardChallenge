@@ -2,6 +2,7 @@ package wirecardchallenge.payments.Service
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.web.server.ResponseStatusException
 import spock.lang.Specification
 import wirecardchallenge.WirecardChallengeExceptions
 import wirecardchallenge.payments.model.Client
@@ -70,7 +71,7 @@ class PaymentServiceTest extends Specification {
         service.createPayment(payment)
 
         then:
-        def ex = thrown InvalidParameterException
+        def ex = thrown ResponseStatusException
         ex.message == WirecardChallengeExceptions.invalidCardCvv.message
     }
 
@@ -84,7 +85,7 @@ class PaymentServiceTest extends Specification {
         service.createPayment(payment)
 
         then:
-        def ex = thrown InvalidParameterException
+        def ex = thrown ResponseStatusException
         ex.message == WirecardChallengeExceptions.invalidBuyerEmail.message
     }
 
@@ -98,7 +99,7 @@ class PaymentServiceTest extends Specification {
         service.createPayment(payment)
 
         then:
-        def ex = thrown InvalidParameterException
+        def ex = thrown ResponseStatusException
         ex.message == WirecardChallengeExceptions.invalidPaymentAmount.message
     }
 
@@ -145,7 +146,7 @@ class PaymentServiceTest extends Specification {
         service.createPayment(payment)
 
         then:
-        def ex = thrown InvalidParameterException
+        def ex = thrown ResponseStatusException
         ex.message == WirecardChallengeExceptions.clientRequiredException.message
     }
 

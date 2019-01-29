@@ -6,8 +6,7 @@ import org.springframework.stereotype.Service;
 import wirecardchallenge.payments.model.Client;
 import wirecardchallenge.payments.repository.ClientRepository;
 
-import static wirecardchallenge.WirecardChallengeExceptions.clientNotFoundException;
-import static wirecardchallenge.WirecardChallengeExceptions.idRequired;
+import static wirecardchallenge.WirecardChallengeExceptions.*;
 
 @Service
 public class ClientService {
@@ -24,6 +23,6 @@ public class ClientService {
         if(id == null)
             throw idRequired;
 
-        return clientRepository.findById(id).orElseThrow(()-> clientNotFoundException);
+        return clientRepository.findById(id).orElseThrow(()-> clientNotFound);
     }
 }

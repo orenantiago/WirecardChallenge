@@ -1,29 +1,30 @@
 package wirecardchallenge;
 
-import javassist.NotFoundException;
-
-import java.security.InvalidParameterException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 public class WirecardChallengeExceptions {
     //    Client
-    public static NotFoundException clientNotFoundException = new NotFoundException("Client not found");
-    public static InvalidParameterException clientRequiredException = new InvalidParameterException("Client required");
+    public static ResponseStatusException clientNotFound = new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found");
+    public static ResponseStatusException clientRequiredException = new ResponseStatusException(HttpStatus.NOT_FOUND, "Client required");
+    public static ResponseStatusException invalidClientName = new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valid client name required");
+    public static ResponseStatusException invalidClientCnpj = new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valid client cnpj number required");
 
     //    Card
-    public static InvalidParameterException invalidCardNumber = new InvalidParameterException("Valid card number required");
-    public static InvalidParameterException invalidCardHolderName = new InvalidParameterException("Card holder name required");
-    public static InvalidParameterException invalidCardCvv = new InvalidParameterException("Valid card cvv number required");
-    public static InvalidParameterException invalidCardExpiration = new InvalidParameterException("Valid card expiration date required");
+    public static ResponseStatusException invalidCardNumber = new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valid card number required");
+    public static ResponseStatusException invalidCardHolderName = new ResponseStatusException(HttpStatus.BAD_REQUEST, "Card holder name required");
+    public static ResponseStatusException invalidCardCvv = new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valid card cvv number required");
+    public static ResponseStatusException invalidCardExpiration = new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valid card expiration date required");
 
     //    Buyer
-    public static InvalidParameterException invalidBuyerName = new InvalidParameterException("Valid buyer name required");
-    public static InvalidParameterException invalidBuyerEmail = new InvalidParameterException("Card buyer email address required");
-    public static InvalidParameterException invalidBuyerCpf = new InvalidParameterException("Valid buyer cpf number required");
+    public static ResponseStatusException invalidBuyerName = new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valid buyer name required");
+    public static ResponseStatusException invalidBuyerEmail = new ResponseStatusException(HttpStatus.BAD_REQUEST, "Card buyer email address required");
+    public static ResponseStatusException invalidBuyerCpf = new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valid buyer cpf number required");
 
     //    Payment
-    public static InvalidParameterException invalidPaymentAmount = new InvalidParameterException("Invalid payment amount");
-    public static NotFoundException paymentNotFound = new NotFoundException("Payment not found");
+    public static ResponseStatusException invalidPaymentAmount = new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid payment amount");
+    public static ResponseStatusException paymentNotFound = new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found");
 
     //    Other
-    public static InvalidParameterException idRequired = new InvalidParameterException("Id required");
+    public static ResponseStatusException idRequired = new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id required");
 }

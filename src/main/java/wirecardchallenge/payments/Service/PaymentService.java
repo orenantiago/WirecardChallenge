@@ -25,7 +25,7 @@ public class PaymentService {
 
 
     @Autowired
-    PaymentRepository repository;
+    PaymentRepository paymentRepository;
 
     @Autowired
     ClientService clientService;
@@ -33,14 +33,14 @@ public class PaymentService {
     public Payment createPayment(Payment payment) throws NotFoundException {
         payment.validateMe();
         processPayment(payment);
-        return repository.save(payment);
+        return paymentRepository.save(payment);
     }
 
     public Payment findById(Integer id) throws NotFoundException {
-        return repository.findById(id).orElseThrow(() -> paymentNotFound);
+        return paymentRepository.findById(id).orElseThrow(() -> paymentNotFound);
     }
     public List<Payment> findAll() {
-        return StreamSupport.stream(repository.findAll().spliterator(), false)
+        return StreamSupport.stream(paymentRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
     }
 

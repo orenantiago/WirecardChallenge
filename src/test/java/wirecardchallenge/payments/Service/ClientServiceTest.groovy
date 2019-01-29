@@ -1,14 +1,13 @@
 package wirecardchallenge.payments.Service
 
-import javassist.NotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.web.server.ResponseStatusException
 import spock.lang.Shared
 import spock.lang.Specification
 import wirecardchallenge.payments.model.Client
 import wirecardchallenge.payments.repository.ClientRepository
-
-import java.security.InvalidParameterException
+import wirecardchallenge.WirecardChallengeExceptions
 
 @SpringBootTest
 class ClientServiceTest extends Specification {
@@ -52,17 +51,19 @@ class ClientServiceTest extends Specification {
         service.findById(123)
 
         then:
-        thrown NotFoundException
+        def ex = thrown ResponseStatusException
+        ex.message == WirecardChallengeExceptions.clientNotFound.message
     }
 
     def "when find by id without id should throw error"() {
         given:
 
         when:
-        def ex = service.findById()
+        service.findById()
 
         then:
-        thrown IllegalArgumentException
+        def ex = thrown ResponseStatusException
+        ex.message == WirecardChallengeExceptions.idRequired.message
     }
 
     def "given invalid client should not create it"() {
@@ -71,6 +72,7 @@ class ClientServiceTest extends Specification {
         service.createClient(client)
 
         then:
-        thrown InvalidParameterException
+        def ex = thrown ResponseStatusException
+        ex.message == WirecardChallengeExceptions.invalidClientName.message
     }
 }
