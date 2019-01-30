@@ -26,6 +26,13 @@ class ClientControllerTest extends Specification {
     @MockBean
     ClientService service
 
+    def "should perform get request to payments endpoint and return 'ok' status"() {
+        when:
+        def results = mvc.perform(get('/payments'))
+
+        then:
+        results.andExpect(status().isOk())
+    }
 
     def "should pass payment details to domain component and return 'created' status"() {
         given:

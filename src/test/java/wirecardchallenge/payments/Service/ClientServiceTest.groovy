@@ -17,17 +17,29 @@ class ClientServiceTest extends Specification {
     @Autowired
     ClientRepository repository
 
-    @Shared
-    Client client
 
-    def setupSpec() {
-        client = new Client()
+    def validClient() {
+        def client = new Client()
         client.name = "test"
         client.cnpj = "74.406.687/0001-04"
+        client
+    }
+
+    def "should find all payments"() {
+        given:
+        service.createClient(validClient())
+        service.createClient(validClient())
+
+        when:
+        def all = service.findAll()
+
+        then:
+        all.size() == 2
     }
 
     def "given valid client should create it"() {
         when:
+        def client = validClient()
         def created = service.createClient(client)
         def found = service.findById(created.id)
 
@@ -37,7 +49,7 @@ class ClientServiceTest extends Specification {
 
     def "given known id should find client"() {
         given:
-        def saved = repository.save(client)
+        def saved = repository.save(validClient())
 
         when:
         def found = service.findById(saved.id)
@@ -68,6 +80,7 @@ class ClientServiceTest extends Specification {
 
     def "given invalid client should not create it"() {
         when:
+        def client = validClient()
         client.name = null
         service.createClient(client)
 

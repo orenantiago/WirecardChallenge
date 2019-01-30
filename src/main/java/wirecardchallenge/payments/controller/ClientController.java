@@ -9,6 +9,8 @@ import wirecardchallenge.Views;
 import wirecardchallenge.payments.Service.ClientService;
 import wirecardchallenge.payments.model.Client;
 
+import java.util.List;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -24,9 +26,17 @@ public class ClientController {
         return service.findById(id);
     }
 
+    @JsonView(value = Views.Public.class)
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/payments", method = RequestMethod.GET,
+            produces = "application/json")
+    public List<Client> getAllPayments(){
+        return service.findAll();
+    }
+
     @RequestMapping(path="/clients", method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE,
             produces = APPLICATION_JSON_VALUE)
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Detail.class)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody Client createClient(@RequestBody Client client) {
         return service.createClient(client);
