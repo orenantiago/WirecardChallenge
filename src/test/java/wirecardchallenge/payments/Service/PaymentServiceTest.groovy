@@ -12,7 +12,6 @@ import wirecardchallenge.payments.model.PaymentType
 import wirecardchallenge.payments.repository.ClientRepository
 import wirecardchallenge.payments.repository.PaymentRepository
 
-import java.security.InvalidParameterException
 import java.time.Instant
 
 @SpringBootTest
@@ -137,6 +136,30 @@ class PaymentServiceTest extends Specification {
 
     }
 
+    def "when create payment with credit card type should should define credit card brand"() {
+        given:
+        def payment = validCreditcardPayment()
+
+        when:
+        def created = service.createPayment(payment)
+
+        then:
+        created.cardBrand
+
+    }
+
+    def "when create payment with invalid credit card number should should throw error"() {
+        given:
+        def payment = validCreditcardPayment()
+        payment.cardNumber = "123"
+        when:
+        service.createPayment(payment)
+
+        then:
+        def ex = thrown ResponseStatusException
+        ex.message == WirecardChallengeExceptions.invalidCardNumber.message
+    }
+
     def "when create payment without client should throw error"() {
         given:
         def payment = validPayment()
@@ -171,7 +194,7 @@ class PaymentServiceTest extends Specification {
     private def validCreditcardPayment() {
         def payment = validPayment()
         payment.type = PaymentType.CREDIT_CARD
-        payment.cardNumber = 123123
+        payment.cardNumber = "5555666677778884"
         payment.cardCvv = 123
         payment.cardHolderName = "test"
         payment.cardExpiration = Date.from(Instant.now().plusSeconds(86400))

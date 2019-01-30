@@ -55,6 +55,7 @@ public class PaymentService {
     }
 
     private void processCreditCardPayment(Payment payment) {
+        payment.setupCardBrand();
         if (Math.random() < 0.5) {
             payment.setStatus(PAID);
         } else {

@@ -1,5 +1,7 @@
 package wirecardchallenge.payments.model;
 
+import br.com.moip.creditcard.Brands;
+import br.com.moip.validators.CreditCard;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,9 +41,8 @@ public class Payment implements Serializable {
     @JsonView(Views.Detail.class)
     private Client client;
 
-    @Column(unique = true)
     @JsonView(Views.Detail.class)
-    private Integer cardNumber;
+    private String cardNumber;
 
     @Size(min=1,max=50)
     @JsonView(Views.Detail.class)
@@ -53,6 +54,9 @@ public class Payment implements Serializable {
 
     @JsonView(Views.Detail.class)
     private Date cardExpiration;
+
+    @JsonView(Views.Detail.class)
+    Brands cardBrand;
 
     @NotNull
     @Size(min=1, max=50)
@@ -94,6 +98,14 @@ public class Payment implements Serializable {
 
     }
 
+    public void setupCardBrand() {
+        cardBrand = new CreditCard(cardNumber).getBrand();
+    }
+
+    public boolean isBoletoType() {
+        return type == PaymentType.BOLETO;
+    }
+
     private void validateBuyerInfo() {
         if(buyerName == null)
             throw invalidBuyerName;
@@ -112,11 +124,7 @@ public class Payment implements Serializable {
             throw invalidCardHolderName;
         if(cardExpiration == null || cardExpiration.before(today))
             throw invalidCardExpiration;
-        if(cardNumber == null || cardNumber < 0)
+        if(cardNumber == null || !(new CreditCard(cardNumber).isValid()))
             throw invalidCardNumber;
-    }
-
-    public boolean isBoletoType() {
-        return type == PaymentType.BOLETO;
     }
 }
