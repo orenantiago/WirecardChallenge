@@ -57,10 +57,6 @@ class PaymentControllerTest extends Specification {
     }
 
     def "should perform get request to payments endpoint and return 'ok' status"() {
-        given:
-        def payment = validPayment()
-        service.createPayment(_) >> payment
-
         when:
         def results = mvc.perform(get('/payments'))
 
