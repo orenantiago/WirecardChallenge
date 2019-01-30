@@ -18,8 +18,8 @@ public class ClientController {
     private ClientService service;
 
     @RequestMapping(path = "/clients/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
     @JsonView(Views.Detail.class)
+    @ResponseStatus(HttpStatus.OK)
     public Client getClient(@PathVariable Integer id) throws NotFoundException {
         return service.findById(id);
     }
@@ -27,6 +27,7 @@ public class ClientController {
     @RequestMapping(path="/clients", method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE,
             produces = APPLICATION_JSON_VALUE)
     @JsonView(Views.Public.class)
+    @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody Client createClient(@RequestBody Client client) {
         return service.createClient(client);
     }
