@@ -28,9 +28,9 @@ public class ClientController {
 
     @JsonView(value = Views.Public.class)
     @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/payments", method = RequestMethod.GET,
+    @RequestMapping(value = "/clients", method = RequestMethod.GET,
             produces = "application/json")
-    public List<Client> getAllPayments(){
+    public List<Client> getAllClients(){
         return service.findAll();
     }
 
